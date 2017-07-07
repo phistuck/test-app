@@ -1,0 +1,30 @@
+runtime: python27
+threadsafe: yes
+api_version: 1
+
+libraries:
+- name: django
+  version: "latest"
+
+handlers:
+- url: /favicon\.ico
+  static_files: static/favicon.ico
+  upload: static/favicon\.ico
+  mime_type: image/vnd.microsoft.icon
+  expiration: 365d
+- url: /blog
+  static_dir: static/blog
+  expiration: 365d
+- url: /flairs
+  static_dir: flairs
+  expiration: 365d
+- url: /robots\.txt
+  static_files: static/robots.txt
+  upload: static/robots\.txt
+  mime_type: text/plain
+  expiration: 365d
+- url: /.*
+  script: application.application
+
+inbound_services:
+- xmpp_message
