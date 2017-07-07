@@ -1,12 +1,9 @@
 from google.appengine.ext import db, webapp
 from google.appengine.api import users
-from google.appengine.ext.webapp import template
 
 import cgi
-import wsgiref.handlers
-import string
 
-from constants import IS_PRODUCTION, PATH
+from constants import IS_PRODUCTION, GITHUB_REPOSITORY
 
 from flair_extender import FlairList
 from messenger import SendPresenceNotification, MessageReceiver
@@ -14,6 +11,7 @@ from browser_extensions_manager import CreateBug, BugProcess, \
  DeleteBugOrComment, ViewBug, AddExtension, \
  EditExtensionChangelog, ViewExtensionChangelog, \
  ExtensionDatabasesViewing, BugDatabaseViewing
+from util import render_template
 
 class GuestbookDatabase(db.Model):
   author = db.UserProperty()
@@ -54,10 +52,12 @@ class MainPage(webapp.RequestHandler):
      <form action="/crazy" method="post">
       <div><textarea name="content" rows="3" cols="60"></textarea></div>
       <div><input type="submit" value="Sign Guestbook"></div>
-     </form><br/><br/><br/>We are standard now, yo! Do you prefer <a href="/quirks">quirks</a>?"""
+     </form><br/><br/><br/>We are standard now, yo! Do you prefer <a href="/quirks">quirks</a>?<br/><br/>
+     This is an open source application.
+     You can find the source code over at <a href="%s">GitHub</a>.""" % GITHUB_REPOSITORY
 
     template_values = {"content": theresponse}
-    self.response.out.write(unicode(template.render(PATH, template_values)))
+    self.response.out.write(render_template(template_values))
 
 class SigningUp(webapp.RequestHandler):
   def get(self):
@@ -73,7 +73,7 @@ class SigningUp(webapp.RequestHandler):
       <input value="Sign up" type="submit"/></form>"""
      template_values = {"title": "Signing Up",
                         "content": theresponse}
-     self.response.out.write(unicode(template.render(PATH, template_values)))
+     self.response.out.write(render_template(template_values))
 
 class SignedUpThankYou(webapp.RequestHandler):
   def post(self):
@@ -88,7 +88,7 @@ class SignedUpThankYou(webapp.RequestHandler):
      You can now move on to doing nothing in the <a href="/">main page</a>."""
     template_values = {"title": "Thank You For Signing Up",
                        "content": theresponse}
-    self.response.out.write(unicode(template.render(PATH, template_values)))
+    self.response.out.write(render_template(template_values))
     
 class Guestbook(webapp.RequestHandler):
   def post(self):
@@ -108,7 +108,7 @@ class Guestbook(webapp.RequestHandler):
       theresponse +='<br/>Your content was not saved, since you do not have a user or not logged in. To log in, click <a href="/login">here</a>. To view past contents, click <a href="/view">here</a>.'
     template_values = {"title": "Guestbook Submission Confirmation",
                        "content": theresponse}
-    self.response.out.write(unicode(template.render(PATH, template_values)))
+    self.response.out.write(render_template(template_values))
 
 class SignInAgain(webapp.RequestHandler):
   def get(self):
@@ -143,7 +143,7 @@ class GuestbookViewing(webapp.RequestHandler):
      theresponse += "<hr/>"
     template_values = {"title": "View Guestbook",
                        "content": theresponse}
-    self.response.out.write(unicode(template.render(PATH, template_values)))
+    self.response.out.write(render_template(template_values))
 
    else:
      self.redirect("/")

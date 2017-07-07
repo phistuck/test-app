@@ -1,18 +1,15 @@
 from google.appengine.ext import db, webapp
-from google.appengine.api import mail, xmpp, users, urlfetch
-from google.appengine.ext.webapp import template
-from datetime import datetime, timedelta, tzinfo, date, time
+from google.appengine.api import mail, users
+from datetime import datetime
 
-import os
-import cgi
-import wsgiref.handlers
 import urllib
 import re
-import string
 
 from constants \
  import EXTENSION_GALLERY, AUTHOR_EMAIL, \
- BUG_DATABASE_NO_REPLY_EMAIL, ORIGIN, PATH
+ BUG_DATABASE_NO_REPLY_EMAIL, ORIGIN
+
+from util import render_template
 
 class ExtensionsDatabase(db.Model):
  name = db.StringProperty(multiline=False)
@@ -62,7 +59,7 @@ class CreateBug(webapp.RequestHandler):
    theresponse += "<input type='submit'></form>"
    template_values = {"title": "Create An Issue",
                       "content": theresponse}
-   self.response.out.write(unicode(template.render(PATH, template_values)))
+   self.response.out.write(render_template(template_values))
 
 class BugProcess(webapp.RequestHandler):
   def post(self):
@@ -209,7 +206,7 @@ class ViewBug(webapp.RequestHandler):
     theresponse += "<input type='submit'></form>"
    template_values = {"title": "View Issue",
                       "content": theresponse}
-   self.response.out.write(unicode(template.render(PATH, template_values)))
+   self.response.out.write(render_template(template_values))
    
 class AddExtension(webapp.RequestHandler):
  def get(self):
@@ -251,7 +248,7 @@ class ViewExtensionChangelog(webapp.RequestHandler):
     theresponse += "</pre>"
   template_values = {"title": extension + " Changelog",
                      "content": theresponse}
-  self.response.out.write(unicode(template.render(PATH, template_values)))
+  self.response.out.write(render_template(template_values))
 
 class ExtensionDatabasesViewing(webapp.RequestHandler):
   def get(self):
@@ -271,7 +268,7 @@ class ExtensionDatabasesViewing(webapp.RequestHandler):
     theresponse += "</form>"
    template_values = {"title": "Extensions Bug Database",
                       "content": theresponse}
-   self.response.out.write(unicode(template.render(PATH, template_values)))
+   self.response.out.write(render_template(template_values))
 
 class BugDatabaseViewing(webapp.RequestHandler):
   def get(self):
@@ -299,4 +296,4 @@ class BugDatabaseViewing(webapp.RequestHandler):
     theresponse += "No issues (yet?)."
    template_values = {"title": extension + " Issues",
                       "content": theresponse}
-   self.response.out.write(unicode(template.render(PATH, template_values)))
+   self.response.out.write(render_template(template_values))

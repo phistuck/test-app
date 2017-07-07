@@ -1,7 +1,7 @@
  <head>
-  <title>PhistucK App{% if title %} - {{ title }}{%endif%}</title>
-  <meta name="verify-v1" content="p/kAzWvGxlguFYBGsQKciiFAnyj8Rx1fX3vCVBGeQhs=" />
-  <meta name="google-site-verification" content="klyjZC6Fu-56goJIc6FcV1KTswQPiDO6ypsNDjZxxy8" />
+  <title>{{ application_title }}{% if title %} - {{ title }}{% endif %}</title>
+  {% if verify_v1 %}<meta name="verify-v1" content="p/kAzWvGxlguFYBGsQKciiFAnyj8Rx1fX3vCVBGeQhs=" />{% endif %}
+  {% if google_site_verification %}<meta name="google-site-verification" content="{{ google_site_verification }}" />{% endif %}
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <style> <!--
    *, body
